@@ -1,0 +1,11 @@
+FROM rust:1.68 as builder
+WORKDIR /usr/src/myapp
+COPY . .
+RUN cargo install --path .
+
+# FROM debian:bullseye-slim
+FROM alpine:3.17
+# RUN apt-get update && apt-get install -y extra-runtime-dependencies && rm -rf /var/lib/apt/lists/*
+COPY --from=builder /usr/local/cargo/bin/rama_fake /usr/local/bin/rama_fake
+EXPOSE 4000
+CMD ["rama_fake"]
